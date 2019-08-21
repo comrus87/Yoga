@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
 // Таймер
   
-  let deadLine = '2019-08-21';
+  let deadLine = '2019-08-25';
 
   function getTimeRemaining (endtime) {
     let t = Date.parse(endtime) - Date.parse(new Date);
@@ -84,5 +84,32 @@ window.addEventListener('DOMContentLoaded', function () {
   };
 
   setClock('timer', deadLine);
+
+// Модальное окно
+
+  let popup = document.querySelector('.overlay');
+  let more = document.querySelector('.more');
+  let btnClose = document.querySelector('.popup-close');
+  let btnDescription = document.querySelectorAll('.description-btn');
+
+  function openPopup () {
+    popup.style.display ='block';
+    this.classList.add('more-splash');
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closePopup () {
+    popup.style.display ='none';
+    more.classList.remove('more-splash');
+    document.body.style.overflow = '';
+  };
+
+  more.addEventListener('click', openPopup);
+
+  for (let i = 0; i < btnDescription.length; i++) {
+    btnDescription[i].addEventListener('click', openPopup);
+  };
+
+  btnClose.addEventListener('click', closePopup);
 
 })
