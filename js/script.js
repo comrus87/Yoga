@@ -112,4 +112,37 @@ window.addEventListener('DOMContentLoaded', function () {
 
   btnClose.addEventListener('click', closePopup);
 
+
+ // Форма
+ 
+ let message = {
+  loading: 'Загрузка...',
+  success: 'Спасибо! Скоро мы с Вами свяжемся...',
+  failure: 'Что-то пошло не так'
+ };
+
+ let mainForm = document.querySelector('.main-form');
+ let popupInput = mainForm.getElementsByTagName('input');
+ let statusMessage = document.createElement('div');
+
+ statusMessage.classList.add('status');
+ 
+ mainForm.addEventListener('submit', function (evt) {
+   evt.preventDefault();
+   mainForm.appendChild(statusMessage);
+
+   let xhr = new XMLHttpRequest();
+
+   xhr.open('POST', 'server.php');
+   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+   let formData = new FormData(mainForm);
+   xhr.send(formData);
+  
+
+ });
+
+
+
+
 })
