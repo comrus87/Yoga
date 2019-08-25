@@ -122,27 +122,48 @@ window.addEventListener('DOMContentLoaded', function () {
  };
 
  let mainForm = document.querySelector('.main-form');
+ let detailForm = document.querySelector('#form');
  let popupInput = mainForm.getElementsByTagName('input');
  let statusMessage = document.createElement('div');
 
  statusMessage.classList.add('status');
+
+ function createRequestForm (evt) {
+  evt.preventDefault();
+  this.appendChild(statusMessage);
+
+  let xhr = new XMLHttpRequest();
+
+  xhr.open('POST', 'server.php');
+  xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+  let formData = new FormData(this);
+
+  let obj = {};
+  formData.forEach(function(value, key) {
+     obj[key] = value;
+  });
+
+  let json = JSON.stringify(obj);   
  
- mainForm.addEventListener('submit', function (evt) {
-   evt.preventDefault();
-   mainForm.appendChild(statusMessage);
+  xhr.addEventListener('load', function () {
+   if (xhr.readyState < 4) {
+    statusMessage.innerHTML = message.loading;
+   } else if (xhr.readyState === 4 && xhr.status == 200) {
+     statusMessage.innerHTML = message.success;
+   } else {
+     statusMessage.innerHTML = message.failure;
+   }
+  })
 
-   let xhr = new XMLHttpRequest();
+  xhr.send(formData);
+ 
+  for (let i = 0; i < popupInput.length; i++ ) {
+    popupInput[i].value = '';
+  };
 
-   xhr.open('POST', 'server.php');
-   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+ };
 
-   let formData = new FormData(mainForm);
-   xhr.send(formData);
-  
-
- });
-
-
-
+ mainForm.addEventListener('submit', createRequestForm);
 
 })
