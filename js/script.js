@@ -116,9 +116,9 @@ window.addEventListener('DOMContentLoaded', function () {
  // Форма
  
  let message = {
-  loading: 'Загрузка...',
-  success: 'Спасибо! Скоро мы с Вами свяжемся...',
-  failure: 'Что-то пошло не так'
+   loading: 'Загрузка...',
+   success: 'Спасибо! Скоро мы с Вами свяжемся...',
+   failure: 'Что-то пошло не так'
  };
 
  let mainForm = document.querySelector('.main-form');
@@ -129,39 +129,52 @@ window.addEventListener('DOMContentLoaded', function () {
  statusMessage.classList.add('status');
 
  function createRequestForm (evt) {
-  evt.preventDefault();
-  this.appendChild(statusMessage);
+   evt.preventDefault();
+   this.appendChild(statusMessage);
 
-  let xhr = new XMLHttpRequest();
+   let formData = new FormData(this);
+   let obj = {};
 
-  xhr.open('POST', 'server.php');
-  xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-  let formData = new FormData(this);
-
-  let obj = {};
-  formData.forEach(function(value, key) {
+   formData.forEach(function(value, key) {
      obj[key] = value;
-  });
+   });
 
-  let json = JSON.stringify(obj);   
+   let json = JSON.stringify(obj);
+
+   function postData (data) {
+   	 return new Promise (function(resolve, reject) {
+	   let xhr = new XMLHttpRequest();
+
+	   xhr.open('POST', 'server.php');
+	   xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+	 
+	   xhr.addEventListener('load', function () {
+	    if (xhr.readyState < 4) {
+	     resolve();
+	    } else if (xhr.readyState === 4 && xhr.status == 200) {
+	      resolve();
+	    } else {
+	      reject();
+	    }
+	   })
+
+	   xhr.send(data);
+
+   	  });
+
+	};
  
-  xhr.addEventListener('load', function () {
-   if (xhr.readyState < 4) {
-    statusMessage.innerHTML = message.loading;
-   } else if (xhr.readyState === 4 && xhr.status == 200) {
-     statusMessage.innerHTML = message.success;
-   } else {
-     statusMessage.innerHTML = message.failure;
-   }
-  })
-
-  xhr.send(formData);
- 
-  for (let i = 0; i < popupInput.length; i++ ) {
-    popupInput[i].value = '';
-  };
-
+   function clearInput () {
+     for (let i = 0; i < popupInput.length; i++ ) {
+	   popupInput[i].value = '';
+	  };
+   };
+   
+   postData(formData)
+                     .then(() => statusMessage.innerHTML = message.loading)
+                     .then(() => statusMessage.innerHTML = message.success)
+                     .catch(() => statusMessage.innerHTML = message.failure)
+                     .then(clearInput);
  };
 
  mainForm.addEventListener('submit', createRequestForm);
