@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
 // Таймер
   
-  let deadLine = '2019-08-25';
+  let deadLine = '2019-09-07';
 
   function getTimeRemaining (endtime) {
     let t = Date.parse(endtime) - Date.parse(new Date);
@@ -227,11 +227,59 @@ window.addEventListener('DOMContentLoaded', function () {
   });
 
   dotsWrap.addEventListener('click', function (evt) {
-    for (let i = 0; i < dots.length + 1; i++) {
+    for (let i = 0; i < dots.length; i++) {
       if (evt.target.classList.contains('dot') && event.target == dots[i-1]) {
         currentSlide(i);
       };
     };
   });
+
+// Калькулятор
+
+  let persons = document.querySelectorAll('.counter-block-input')[0];
+  let restDays = document.querySelectorAll('.counter-block-input')[1];
+  let place = document.getElementById('select');
+  let totalValue = document.getElementById('total');
+
+  let personSum = 0;
+  let daysSum = 0;
+  let total = 0; 
+
+  totalValue.innerHTML = 0;
+
+  persons.addEventListener('change', function () {
+    personSum = +this.value;
+    total = (daysSum + personSum) * 4000;
+
+    if (restDays.value == '') {
+      totalValue.innerHTML = 0;
+    } else {
+       totalValue.innerHTML = total;
+    };
+
+  });
+
+   restDays.addEventListener('change', function () {
+    restDays = +this.value;
+    total = (daysSum + personSum) * 4000;
+
+    if (persons.value == '') {
+      totalValue.innerHTML = 0;
+    } else {
+       totalValue.innerHTML = total;
+    };
+
+  });
+
+  place.addEventListener('change', function () {
+    if (restDays.value == '' || persons.value == '') {
+       totalValue.innerHTML = 0;
+    } else {
+      let a = total;
+      totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+    };
+
+  });
+
 
 })
