@@ -1,7 +1,6 @@
 {
   "name": "yoga",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,7 +16,16 @@
   },
   "homepage": "https://github.com/comrus87/Yoga#readme",
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "es6-promise": "^4.2.8",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7"
-  }
+  },
+  "dependencies": {
+    "formdata-polyfill": "^3.0.19",
+    "nodelist-foreach-polyfill": "^1.2.0"
+  },
+  "description": ""
 }
